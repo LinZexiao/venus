@@ -1,0 +1,63 @@
+name: compatible-check
+
+on:
+  pull_request:
+    branches:
+      - '**'
+  push:
+    branches:
+      - '**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+          fetch-depth: '1'
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+      - name: Install GCC
+        uses: egor-tensin/setup-gcc@v1
+        with:
+          version: latest
+          platform: x64
+
+      - name: check api compatible
+        run: |
+          git checkout .
+          make compatible-api
+          git --no-pager diff
+          git --no-pager diff --quiete
+
+      - name: check actor compatible
+        run: |
+          git checkout .
+          make compatible-actor
+          git --no-pager diff
+          git --no-pager diff --quiet
+
+      - name: check api docs
+        run: | 
+          git checkout .
+          make api-docs
+          git --no-pager diff
+          git --no-pager diff --quiet
+          
+
+      - name: check cbor-gen
+        run: |
+          git checkout .
+          make cborgen
+          git --no-pager diff
+          git --no-pager diff --quiet
+
+      - name: check mock api
+        run: |
+          git checkout .
+          make mock-api-gen
+          git --no-pager diff
+          git --no-pager diff --quiet
