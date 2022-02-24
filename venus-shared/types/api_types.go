@@ -272,12 +272,34 @@ type MsgGasCost struct {
 	TotalCost          abi.TokenAmount
 }
 
-type InvocResult struct {
-	MsgCid         cid.Cid
-	Msg            *Message
-	MsgRct         *MessageReceipt
-	GasCost        MsgGasCost
-	ExecutionTrace ExecutionTrace
-	Error          string
-	Duration       time.Duration
+type TipsetInvokeResult struct {
+	Key       TipSetKey
+	Epoch     abi.ChainEpoch
+	StateRoot cid.Cid
+	MsgRets   []*InvocResult
 }
+
+type InvocResult struct {
+	MsgCid cid.Cid // if returned by implicitly called message MsgCid is undefined.
+
+	// this field can be an *vmcontext.VMMessage(implicitly called message) or *UnsignedMessage,
+	Msg interface{} `json:",omitempty"`
+
+	StateRootAfterApply cid.Cid // the state root after message apply
+
+	MsgRct         *MessageReceipt `json:",omitempty"`
+	GasCost        *MsgGasCost
+	ExecutionTrace *ExecutionTrace // if returned by implicitly called message member field 'Msg' is nil
+	Error          string          `json:",omitempty"`
+	Duration       time.Duration   `json:",omitempty"`
+}
+
+//type InvocResult struct {
+//	MsgCid         cid.Cid
+//	Msg            *Message
+//	MsgRct         *MessageReceipt
+//	GasCost        MsgGasCost
+//	ExecutionTrace ExecutionTrace
+//	Error          string
+//	Duration       time.Duration
+//}

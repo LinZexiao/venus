@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	fbig "github.com/filecoin-project/go-state-types/big"
 	"io"
 	"os"
 	"strings"
+
+	fbig "github.com/filecoin-project/go-state-types/big"
 
 	cmds "github.com/ipfs/go-ipfs-cmds"
 	"github.com/ipfs/go-ipfs-cmds/cli"
@@ -141,6 +142,7 @@ TOOL COMMANDS
   version                - Show venus version information
   seed                   - Seal sectors for genesis miner
   fetch                  - Fetch proving parameters
+  exec-trace             - execute message and retrieve gas traces
 `,
 	},
 	Options: []cmds.Option{
@@ -308,6 +310,13 @@ func getAPIInfo(req *cmds.Request) (*APIInfo, error) {
 			token = tkArr[0]
 		}
 	}
+
+	if len(token) == 0 {
+		if envToken := os.Getenv("FIL_TOKEN"); envToken != "" {
+			token = envToken
+		}
+	}
+
 	if len(token) == 0 {
 		tk, err := repo.APITokenFromRepoPath(repoDir)
 		if err != nil {

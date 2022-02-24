@@ -676,7 +676,12 @@ type ISyncerStruct struct {
 		SyncState                func(ctx context.Context) (*types.SyncState, error)                                            `perm:"read"`
 		SyncSubmitBlock          func(ctx context.Context, blk *types.BlockMsg) error                                           `perm:"write"`
 		SyncerTracker            func(ctx context.Context) *types.TargetTracker                                                 `perm:"read"`
+		ReplayTipset             func(p0 context.Context, p1 types.TipSetKey) (*types.TipsetInvokeResult, error)                `perm:"read"`
 	}
+}
+
+func (s *ISyncerStruct) ReplayTipset(p0 context.Context, p1 types.TipSetKey) (*types.TipsetInvokeResult, error) {
+	return s.Internal.ReplayTipset(p0, p1)
 }
 
 func (s *ISyncerStruct) ChainSyncHandleNewTipSet(p0 context.Context, p1 *types.ChainInfo) error {

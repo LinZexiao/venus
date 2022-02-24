@@ -4,6 +4,11 @@ import (
 	"context"
 	"time"
 
+	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/venus/pkg/fork"
+	"github.com/filecoin-project/venus/pkg/vm/vmcontext"
+	"github.com/ipfs/go-cid"
+
 	"github.com/filecoin-project/go-state-types/big"
 	syncTypes "github.com/filecoin-project/venus/pkg/chainsync/types"
 	v1api "github.com/filecoin-project/venus/venus-shared/api/chain/v1"
@@ -178,7 +183,7 @@ func (sa *syncerAPI) StateCall(ctx context.Context, msg *types.Message, tsk type
 		MsgCid:         mcid,
 		Msg:            msg,
 		MsgRct:         &ret.Receipt,
-		ExecutionTrace: types.ExecutionTrace{},
+		ExecutionTrace: &ret.GasTracker.ExecutionTrace,
 		Duration:       duration,
 	}, nil
 }
@@ -231,4 +236,53 @@ func (sa *syncerAPI) SyncState(ctx context.Context) (*types.SyncState, error) {
 	}
 
 	return syncState, nil
+}
+
+func (sa *syncerAPI) ReplayTipset(ctx context.Context, tsKey types.TipSetKey) (*types.TipsetInvokeResult, error) {
+	chainReader := sa.syncer.ChainModule.ChainReader
+	ts, err := chainReader.GetTipSet(ctx, tsKey)
+	if err != nil {
+		return nil, err
+	}
+	parent, err := chainReader.GetTipSet(ctx, tsKey)
+	if err != nil {
+		return nil, err
+	}
+
+	if parent.Height() > 0 && sa.syncer.ChainModule.Fork.HasExpensiveFork(ctx, parent.Height()) {
+		return nil, fork.ErrExpensiveFork
+	}
+
+	var results []*types.InvocResult
+	cb := func(cid cid.Cid, msg *types.Message, ret *vmcontext.Ret) error {
+		results = append(results, &types.InvocResult{
+			StateRootAfterApply: ret.RootCid,
+			MsgCid:              cid,
+			MsgRct:              &ret.Receipt,
+			Msg:                 &msg,
+			GasCost: &types.MsgGasCost{
+				Message:            cid,
+				GasUsed:            abi.NewTokenAmount(ret.Receipt.GasUsed),
+				BaseFeeBurn:        ret.OutPuts.BaseFeeBurn,
+				OverEstimationBurn: ret.OutPuts.OverEstimationBurn,
+				MinerPenalty:       ret.OutPuts.MinerPenalty,
+				MinerTip:           ret.OutPuts.MinerTip,
+				Refund:             ret.OutPuts.Refund,
+			},
+			ExecutionTrace: &ret.GasTracker.ExecutionTrace,
+		})
+		return nil
+	}
+
+	stateRoot, _, err := sa.syncer.Stmgr.RunStateTransitionCallback(ctx, ts, cb)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.TipsetInvokeResult{
+		Key:       ts.Key(),
+		Epoch:     ts.Height(),
+		StateRoot: stateRoot,
+		MsgRets:   results}, nil
 }

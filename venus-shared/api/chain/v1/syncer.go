@@ -17,4 +17,5 @@ type ISyncer interface {
 	SyncSubmitBlock(ctx context.Context, blk *types.BlockMsg) error                                     //perm:write
 	StateCall(ctx context.Context, msg *types.Message, tsk types.TipSetKey) (*types.InvocResult, error) //perm:read
 	SyncState(ctx context.Context) (*types.SyncState, error)                                            //perm:read
+	ReplayTipset(ctx context.Context, tsKey types.TipSetKey) (*types.TipsetInvokeResult, error)         //perm:read
 }

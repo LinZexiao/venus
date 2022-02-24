@@ -29,6 +29,7 @@ import (
 	rt5 "github.com/filecoin-project/specs-actors/v5/actors/runtime"
 	rt6 "github.com/filecoin-project/specs-actors/v6/actors/runtime"
 	rt7 "github.com/filecoin-project/specs-actors/v7/actors/runtime"
+
 	/* inline-gen end */
 
 	"github.com/filecoin-project/venus/pkg/vm/gas"
@@ -124,6 +125,9 @@ func (a *runtimeAdapter) stateCommit(oldh, newh cid.Cid) error {
 	}
 
 	act.Head = newh
+
+	a.gasTank.Charge(gasOnSetActor(a.Receiver(), act), "")
+
 	if err := a.ctx.vm.State.SetActor(a.Context(), a.Receiver(), act); err != nil {
 		return xerrors.Errorf("failed To set actor in commit stateView, %s", err)
 	}
@@ -310,7 +314,7 @@ func (a *runtimeAdapter) CreateActor(codeID cid.Cid, addr address.Address) {
 		panic(err)
 	}
 
-	_ = a.ctx.gasTank.TryCharge(gasOnActorExec)
+	_ = a.ctx.gasTank.TryCharge(gasOnActorExec, 0)
 }
 
 // DeleteActor implements Runtime.

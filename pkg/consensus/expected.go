@@ -43,6 +43,7 @@ const AllowableClockDriftSecs = uint64(1)
 
 // A Processor processes all the messages in a block or tip set.
 type Processor interface {
+	ProcessTipSetCallback(context.Context, *types.TipSet, *types.TipSet, []types.BlockMessagesInfo, vm.VmOption, vm.ExecCallBack) (cid.Cid, []types.MessageReceipt, error)
 	// ProcessTipSet processes all messages in a tip set.
 	ProcessTipSet(context.Context, *types.TipSet, *types.TipSet, []types.BlockMessagesInfo, vm.VmOption) (cid.Cid, []types.MessageReceipt, error)
 	ProcessImplicitMessage(context.Context, *types.Message, vm.VmOption) (*vm.Ret, error)
@@ -165,10 +166,15 @@ func NewExpected(cs cbor.IpldStore,
 	}
 }
 
+func (c *Expected) RunStateTransition(ctx context.Context,
+	ts *types.TipSet) (cid.Cid, cid.Cid, error) {
+	return c.RunStateTransitionCallback(ctx, ts, nil)
+}
+
 // RunStateTransition applies the messages in a tipset to a state, and persists that new state.
 // It errors if the tipset was not mined according to the EC rules, or if any of the messages
 // in the tipset results in an error.
-func (c *Expected) RunStateTransition(ctx context.Context, ts *types.TipSet) (cid.Cid, cid.Cid, error) {
+func (c *Expected) RunStateTransitionCallback(ctx context.Context, ts *types.TipSet, cb vm.ExecCallBack) (cid.Cid, cid.Cid, error) {
 	begin := time.Now()
 	defer func() {
 		logExpect.Infof("expected.runstatetransition(height:%d, blocks:%d), cost time = %.4f(s)",
@@ -218,7 +224,8 @@ func (c *Expected) RunStateTransition(ctx context.Context, ts *types.TipSet) (ci
 		PRoot:               ts.At(0).ParentStateRoot,
 		SysCallsImpl:        c.syscallsImpl,
 	}
-	root, receipts, err := c.processor.ProcessTipSet(ctx, pts, ts, blockMessageInfo, vmOption)
+	root, receipts, err := c.processor.ProcessTipSetCallback(ctx, pts, ts, blockMessageInfo, vmOption, cb)
+	//root, receipts, err := c.processor.ProcessTipSet(ctx, pts, ts, blockMessageInfo, vmOption)
 	if err != nil {
 		return cid.Undef, cid.Undef, errors.Wrap(err, "error validating tipset")
 	}

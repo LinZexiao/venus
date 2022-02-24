@@ -55,6 +55,16 @@ func (p *DefaultProcessor) ProcessTipSet(ctx context.Context,
 	msgs []types.BlockMessagesInfo,
 	vmOption vm.VmOption,
 ) (cid.Cid, []types.MessageReceipt, error) {
+	return p.ProcessTipSetCallback(ctx, parent, ts, msgs, vmOption, nil)
+}
+
+// ProcessTipSet computes the state transition specified by the messages in all blocks in a TipSet.
+func (p *DefaultProcessor) ProcessTipSetCallback(ctx context.Context,
+	parent, ts *types.TipSet,
+	msgs []types.BlockMessagesInfo,
+	vmOption vm.VmOption,
+	cb vm.ExecCallBack,
+) (cid.Cid, []types.MessageReceipt, error) {
 	_, span := trace.StartSpan(ctx, "DefaultProcessor.ProcessTipSet")
 	span.AddAttributes(trace.StringAttribute("tipset", ts.String()))
 
@@ -69,7 +79,7 @@ func (p *DefaultProcessor) ProcessTipSet(ctx context.Context,
 		return cid.Undef, nil, err
 	}
 
-	return v.ApplyTipSetMessages(msgs, ts, parentEpoch, epoch, nil)
+	return v.ApplyTipSetMessages(msgs, ts, parentEpoch, epoch, cb)
 }
 
 //ProcessImplicitMessage compute the state of specify message but this functions skip value, gas,check

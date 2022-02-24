@@ -199,6 +199,10 @@ redo:
 	return nil
 }
 
+func (s *Stmgr) RunStateTransitionCallback(ctx context.Context, ts *types.TipSet, back vm.ExecCallBack) (root cid.Cid, receipt cid.Cid, err error) {
+	return s.cp.RunStateTransitionCallback(ctx, ts, back)
+}
+
 func (s *Stmgr) RunStateTransition(ctx context.Context, ts *types.TipSet) (root cid.Cid, receipts cid.Cid, err error) {
 	if nil != s.stopFlag(false) {
 		return cid.Undef, cid.Undef, fmt.Errorf("state manager is stopping")
