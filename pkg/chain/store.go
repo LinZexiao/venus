@@ -8,6 +8,7 @@ import (
 	"os"
 	"runtime/debug"
 	"sync"
+	"sync/atomic"
 
 	lru "github.com/hashicorp/golang-lru"
 	"github.com/ipfs/go-cid"
@@ -78,6 +79,11 @@ type reorg struct {
 	new []*types.TipSet
 }
 
+type reorgChecker struct {
+	reorg      *reorg
+	isForCheck bool
+}
+
 // CheckPoint is the key which the check-point written in the datastore.
 var CheckPoint = datastore.NewKey("/chain/checkPoint")
 
@@ -131,8 +137,10 @@ type Store struct {
 
 	chainIndex *ChainIndex
 
-	reorgCh        chan reorg
-	reorgNotifeeCh chan ReorgNotifee
+	reorgCh           chan reorg         // actual send out channel
+	innerReorgCh      chan *reorgChecker // channel just for send to reorg push worker
+	reorgNotifeeCh    chan ReorgNotifee
+	reorgWorkerStoper context.CancelFunc
 
 	tsCache *lru.ARCCache
 }
@@ -596,14 +604,68 @@ func (store *Store) SetHead(ctx context.Context, newTS *types.TipSet) error {
 	//Reverse(dropped)
 
 	//do reorg
-	store.reorgCh <- reorg{
-		old: dropped,
-		new: added,
-	}
+	store.sendToPushWorker(&reorg{old: dropped, new: added})
 	return nil
 }
 
+func (store *Store) sendToPushWorker(r *reorg) {
+	store.innerReorgCh <- &reorgChecker{reorg: r, isForCheck: false}
+}
+
+func (store *Store) startReorgPusherWorker(ctx context.Context) {
+	// this function won't be called parallelly, doesn't needs a lock
+	if store.innerReorgCh == nil {
+		store.innerReorgCh = make(chan *reorgChecker, 50)
+	}
+	go func() {
+		var regors []reorg
+		var isOnPusher int32
+		for {
+			select {
+			case r, isok := <-store.innerReorgCh:
+				if !isok {
+					log.Infof("Reorg channel is closed, stop worker.")
+					return
+				}
+
+				if !r.isForCheck {
+					regors = append(regors, *r.reorg)
+				} else if len(regors) == 0 {
+					continue
+				}
+				log.Infof("still have %d Regors to notify.", len(regors))
+
+				if atomic.CompareAndSwapInt32(&isOnPusher, 0, 1) {
+
+					go func(rs []reorg) {
+						for _, r := range rs {
+							select {
+							case <-ctx.Done():
+								log.Info("context done, Stop send reorg...")
+								return
+							default:
+								store.reorgCh <- r
+							}
+						}
+						atomic.StoreInt32(&isOnPusher, 0)
+
+						// send a just for checking reorgChecker, in case there are new reorg to send
+						store.innerReorgCh <- &reorgChecker{reorg: nil, isForCheck: true}
+					}(regors)
+
+					regors = nil
+				}
+			case <-ctx.Done():
+				close(store.innerReorgCh)
+				log.Info("context done, Stop reorgPush Worker...")
+				return
+			}
+		}
+	}()
+}
+
 func (store *Store) reorgWorker(ctx context.Context) chan reorg {
+	ctx, store.reorgWorkerStoper = context.WithCancel(ctx)
 	headChangeNotifee := func(rev, app []*types.TipSet) error {
 		notif := make([]*types.HeadChange, len(rev)+len(app))
 		for i, revert := range rev {
@@ -671,6 +733,8 @@ func (store *Store) reorgWorker(ctx context.Context) chan reorg {
 			}
 		}
 	}()
+
+	store.startReorgPusherWorker(ctx)
 	return out
 }
 
@@ -1158,6 +1222,7 @@ func (store *Store) GetCheckPoint() types.TipSetKey {
 // Stop stops all activities and cleans up.
 func (store *Store) Stop() {
 	store.headEvents.Shutdown()
+	store.reorgWorkerStoper()
 }
 
 // ReorgOps used to reorganize the blockchain. Whenever a new tipset is approved,
