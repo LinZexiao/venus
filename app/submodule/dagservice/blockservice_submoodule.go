@@ -9,7 +9,6 @@ import (
 	"github.com/filecoin-project/venus/pkg/util/dag"
 	"github.com/ipfs/go-cid"
 	ipld "github.com/ipfs/go-ipld-format"
-	"github.com/ipfs/go-merkledag"
 
 	bserv "github.com/ipfs/go-blockservice"
 )
@@ -37,7 +36,7 @@ type dagConfig interface {
 // NewDagserviceSubmodule creates a new block service submodule.
 func NewDagserviceSubmodule(ctx context.Context, dagCfg dagConfig, network *network.NetworkSubmodule) (*DagServiceSubmodule, error) {
 	bservice := bserv.New(dagCfg.Repo().Datastore(), network.Bitswap)
-	dag := dag.NewDAG(merkledag.NewDAGService(bservice))
+	dag := dag.NewDAG(bservice)
 	return &DagServiceSubmodule{
 		Blockservice: bservice,
 		Dag:          dag,

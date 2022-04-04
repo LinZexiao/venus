@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io"
 
+	bserv "github.com/ipfs/go-blockservice"
 	"github.com/ipfs/go-cid"
+	bsfetcher "github.com/ipfs/go-fetcher/impl/blockservice"
 	chunk "github.com/ipfs/go-ipfs-chunker"
 	ipld "github.com/ipfs/go-ipld-format"
 	"github.com/ipfs/go-merkledag"
@@ -19,13 +21,15 @@ import (
 
 // DAG is a service for accessing the merkledag
 type DAG struct {
-	dserv ipld.DAGService // Provides access to state tree.
+	bserv bserv.BlockService
+	dserv ipld.DAGService
 }
 
 // NewDAG creates a DAG with a given DAGService
-func NewDAG(dserv ipld.DAGService) *DAG {
+func NewDAG(bserv bserv.BlockService) *DAG {
 	return &DAG{
-		dserv: dserv,
+		bserv: bserv,
+		dserv: merkledag.NewDAGService(bserv),
 	}
 }
 
@@ -35,14 +39,13 @@ func (dag *DAG) GetNode(ctx context.Context, ref string) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	resolver := resolver.NewBasicResolver(dag.dserv)
+	fetcherFactory := bsfetcher.NewFetcherConfig(dag.bserv)
+	resolver := resolver.NewBasicResolver(fetcherFactory)
 
 	objc, rem, err := resolver.ResolveToLastNode(ctx, parsedRef)
 	if err != nil {
 		return nil, err
 	}
-
 	obj, err := dag.dserv.Get(ctx, objc)
 	if err != nil {
 		return nil, err

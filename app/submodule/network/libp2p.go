@@ -153,3 +153,7 @@ func (noopLibP2PNetwork) Process() goprocess.Process {
 func (noopLibP2PNetwork) API() interface{} {
 	return nil
 }
+
+func (noopLibP2PNetwork) ResourceManager() net.ResourceManager {
+	panic("implement me")
+}
