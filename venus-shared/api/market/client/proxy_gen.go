@@ -7,7 +7,6 @@ import (
 	address "github.com/filecoin-project/go-address"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	cid "github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 
@@ -38,7 +37,7 @@ type IMarketClientStruct struct {
 		ClientListImports                         func(ctx context.Context) ([]client.Import, error)                                                         `perm:"write"`
 		ClientListRetrievals                      func(ctx context.Context) ([]client.RetrievalInfo, error)                                                  `perm:"write"`
 		ClientMinerQueryOffer                     func(ctx context.Context, miner address.Address, root cid.Cid, piece *cid.Cid) (client.QueryOffer, error)  `perm:"read"`
-		ClientQueryAsk                            func(ctx context.Context, p peer.ID, miner address.Address) (*storagemarket.StorageAsk, error)             `perm:"read"`
+		ClientQueryAsk                            func(ctx context.Context, p peer.ID, miner address.Address) (*client.StorageAsk, error)                    `perm:"read"`
 		ClientRemoveImport                        func(ctx context.Context, importID client.ImportID) error                                                  `perm:"admin"`
 		ClientRestartDataTransfer                 func(ctx context.Context, transferID datatransfer.TransferID, otherPeer peer.ID, isInitiator bool) error   `perm:"write"`
 		ClientRetrieve                            func(ctx context.Context, params client.RetrievalOrder) (*client.RestrievalRes, error)                     `perm:"admin"`
@@ -118,7 +117,7 @@ func (s *IMarketClientStruct) ClientListRetrievals(p0 context.Context) ([]client
 func (s *IMarketClientStruct) ClientMinerQueryOffer(p0 context.Context, p1 address.Address, p2 cid.Cid, p3 *cid.Cid) (client.QueryOffer, error) {
 	return s.Internal.ClientMinerQueryOffer(p0, p1, p2, p3)
 }
-func (s *IMarketClientStruct) ClientQueryAsk(p0 context.Context, p1 peer.ID, p2 address.Address) (*storagemarket.StorageAsk, error) {
+func (s *IMarketClientStruct) ClientQueryAsk(p0 context.Context, p1 peer.ID, p2 address.Address) (*client.StorageAsk, error) {
 	return s.Internal.ClientQueryAsk(p0, p1, p2)
 }
 func (s *IMarketClientStruct) ClientRemoveImport(p0 context.Context, p1 client.ImportID) error {

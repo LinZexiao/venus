@@ -11,7 +11,6 @@ import (
 	address "github.com/filecoin-project/go-address"
 	datatransfer "github.com/filecoin-project/go-data-transfer"
 	retrievalmarket "github.com/filecoin-project/go-fil-markets/retrievalmarket"
-	storagemarket "github.com/filecoin-project/go-fil-markets/storagemarket"
 	big "github.com/filecoin-project/go-state-types/big"
 	internal "github.com/filecoin-project/venus/venus-shared/internal"
 	types "github.com/filecoin-project/venus/venus-shared/types"
@@ -342,10 +341,10 @@ func (mr *MockIMarketClientMockRecorder) ClientMinerQueryOffer(arg0, arg1, arg2,
 }
 
 // ClientQueryAsk mocks base method.
-func (m *MockIMarketClient) ClientQueryAsk(arg0 context.Context, arg1 peer.ID, arg2 address.Address) (*storagemarket.StorageAsk, error) {
+func (m *MockIMarketClient) ClientQueryAsk(arg0 context.Context, arg1 peer.ID, arg2 address.Address) (*client.StorageAsk, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ClientQueryAsk", arg0, arg1, arg2)
-	ret0, _ := ret[0].(*storagemarket.StorageAsk)
+	ret0, _ := ret[0].(*client.StorageAsk)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
