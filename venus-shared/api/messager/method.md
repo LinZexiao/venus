@@ -5,6 +5,7 @@
   * [ClearUnFillMessage](#ClearUnFillMessage)
   * [DeleteAddress](#DeleteAddress)
   * [DeleteNode](#DeleteNode)
+  * [FixMsg](#FixMsg)
   * [ForbiddenAddress](#ForbiddenAddress)
   * [ForcePushMessage](#ForcePushMessage)
   * [ForcePushMessageWithId](#ForcePushMessageWithId)
@@ -98,6 +99,21 @@ Inputs:
 ```json
 [
   "string value"
+]
+```
+
+Response: `{}`
+
+### FixMsg
+
+
+Perms: admin
+
+Inputs:
+```json
+[
+  "string value",
+  true
 ]
 ```
 

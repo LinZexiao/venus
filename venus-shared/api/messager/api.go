@@ -61,5 +61,5 @@ type IMessager interface {
 
 	Send(ctx context.Context, params types.QuickSendParams) (string, error) //perm:admin
 
-	FixMsg(ctx context.Context, id string, send bool) error
+	FixMsg(ctx context.Context, id string, send bool) error //perm:admin
 }
