@@ -18,6 +18,7 @@ type IMessagerStruct struct {
 		ClearUnFillMessage       func(ctx context.Context, addr address.Address) (int, error)                                                                             `perm:"admin"`
 		DeleteAddress            func(ctx context.Context, addr address.Address) error                                                                                    `perm:"admin"`
 		DeleteNode               func(ctx context.Context, name string) error                                                                                             `perm:"admin"`
+		FixMsg                   func(ctx context.Context, id string, send bool) error                                                                                    `perm:""`
 		ForbiddenAddress         func(ctx context.Context, addr address.Address) error                                                                                    `perm:"admin"`
 		ForcePushMessage         func(ctx context.Context, account string, msg *shared.Message, meta *types.SendSpec) (string, error)                                     `perm:"admin"`
 		ForcePushMessageWithId   func(ctx context.Context, id string, account string, msg *shared.Message, meta *types.SendSpec) (string, error)                          `perm:"write"`
@@ -71,6 +72,9 @@ func (s *IMessagerStruct) DeleteAddress(p0 context.Context, p1 address.Address) 
 }
 func (s *IMessagerStruct) DeleteNode(p0 context.Context, p1 string) error {
 	return s.Internal.DeleteNode(p0, p1)
+}
+func (s *IMessagerStruct) FixMsg(p0 context.Context, p1 string, p2 bool) error {
+	return s.Internal.FixMsg(p0, p1, p2)
 }
 func (s *IMessagerStruct) ForbiddenAddress(p0 context.Context, p1 address.Address) error {
 	return s.Internal.ForbiddenAddress(p0, p1)

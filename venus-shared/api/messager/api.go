@@ -60,4 +60,6 @@ type IMessager interface {
 	SetLogLevel(ctx context.Context, level string) error //perm:admin
 
 	Send(ctx context.Context, params types.QuickSendParams) (string, error) //perm:admin
+
+	FixMsg(ctx context.Context, id string, send bool) error
 }
