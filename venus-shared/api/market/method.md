@@ -60,6 +60,7 @@
   * [MessagerPushMessage](#MessagerPushMessage)
   * [MessagerWaitMessage](#MessagerWaitMessage)
   * [NetAddrsListen](#NetAddrsListen)
+  * [NetConnect](#NetConnect)
   * [PaychVoucherList](#PaychVoucherList)
   * [PiecesGetCIDInfo](#PiecesGetCIDInfo)
   * [PiecesGetPieceInfo](#PiecesGetPieceInfo)
@@ -1517,6 +1518,20 @@ Response:
   ]
 }
 ```
+
+### NetConnect
+
+
+Perms: admin
+
+Inputs:
+```json
+[
+  "string value"
+]
+```
+
+Response: `{}`
 
 ### PaychVoucherList
 Paych

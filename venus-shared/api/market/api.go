@@ -84,7 +84,9 @@ type IMarket interface {
 	MarketWithdraw(ctx context.Context, wallet, addr address.Address, amt types.BigInt) (cid.Cid, error)                     //perm:sign
 
 	NetAddrsListen(context.Context) (peer.AddrInfo, error) //perm:read
-	ID(context.Context) (peer.ID, error)                   //perm:read
+	NetConnect(ctx context.Context, addr string) error     //perm:admin
+
+	ID(context.Context) (peer.ID, error) //perm:read
 
 	// DagstoreListShards returns information about all shards known to the
 	// DAG store. Only available on nodes running the markets subsystem.
