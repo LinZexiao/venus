@@ -85,9 +85,9 @@ type IMarket interface {
 	MarketReleaseFunds(ctx context.Context, addr address.Address, amt types.BigInt) error                                    //perm:sign
 	MarketWithdraw(ctx context.Context, wallet, addr address.Address, amt types.BigInt) (cid.Cid, error)                     //perm:sign
 
-	NetAddrsListen(context.Context) (peer.AddrInfo, error)  //perm:read
-	NetConnect(ctx context.Context, addr string) error      //perm:admin
-	NetPeers(ctx context.Context) ([]peer.AddrInfo, error) //perm:red
+	NetAddrsListen(context.Context) (peer.AddrInfo, error) //perm:read
+	NetConnect(ctx context.Context, addr string) error     //perm:admin
+	NetPeers(ctx context.Context) ([]peer.AddrInfo, error) //perm:read
 
 	ID(context.Context) (peer.ID, error) //perm:read
 
