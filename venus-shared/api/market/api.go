@@ -2,6 +2,7 @@ package market
 
 import (
 	"context"
+	"github.com/filecoin-project/storetheindex/api/v0/ingest/schema"
 	"time"
 
 	"github.com/ipfs/go-cid"
@@ -21,6 +22,7 @@ import (
 )
 
 type IMarket interface {
+	IIdxProvider
 	ActorList(context.Context) ([]market.User, error)                         //perm:read
 	ActorExist(ctx context.Context, addr address.Address) (bool, error)       //perm:read
 	ActorSectorSize(context.Context, address.Address) (abi.SectorSize, error) //perm:read
@@ -149,4 +151,9 @@ type IMarket interface {
 	GetWriteUrl(ctx context.Context, resource string) (string, error) //perm:read
 
 	ImportV1Data(ctx context.Context, src string) error //perm:write
+}
+
+type IIdxProvider interface {
+	IndexAnnounce(ctx context.Context) (*schema.Advertisement, error) 	//perm:admin
+	IndexLatestAdvertisement(ctx context.Context) (*schema.Advertisement, error) //perm:admin
 }

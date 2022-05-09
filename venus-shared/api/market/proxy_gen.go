@@ -11,6 +11,7 @@ import (
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/filecoin-project/storetheindex/api/v0/ingest/schema"
 	cid "github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 
@@ -20,7 +21,23 @@ import (
 	"github.com/filecoin-project/venus/venus-shared/types/market"
 )
 
+type IIdxProviderStruct struct {
+	Internal struct {
+		IndexAnnounce            func(ctx context.Context) (*schema.Advertisement, error) `perm:"admin"`
+		IndexLatestAdvertisement func(ctx context.Context) (*schema.Advertisement, error) `perm:"admin"`
+	}
+}
+
+func (s *IIdxProviderStruct) IndexAnnounce(p0 context.Context) (*schema.Advertisement, error) {
+	return s.Internal.IndexAnnounce(p0)
+}
+func (s *IIdxProviderStruct) IndexLatestAdvertisement(p0 context.Context) (*schema.Advertisement, error) {
+	return s.Internal.IndexLatestAdvertisement(p0)
+}
+
 type IMarketStruct struct {
+	IIdxProviderStruct
+
 	Internal struct {
 		ActorExist                             func(ctx context.Context, addr address.Address) (bool, error)                                                                                                                                       `perm:"read"`
 		ActorList                              func(context.Context) ([]market.User, error)                                                                                                                                                        `perm:"read"`
