@@ -87,7 +87,7 @@ type IMarket interface {
 
 	NetAddrsListen(context.Context) (peer.AddrInfo, error)  //perm:read
 	NetConnect(ctx context.Context, addr string) error      //perm:admin
-	NetPeers(ctx context.Context) ([]*peer.AddrInfo, error) //perm:red
+	NetPeers(ctx context.Context) ([]peer.AddrInfo, error) //perm:red
 
 	ID(context.Context) (peer.ID, error) //perm:read
 

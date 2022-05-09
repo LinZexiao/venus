@@ -99,6 +99,7 @@ type IMarketStruct struct {
 		MessagerWaitMessage                    func(ctx context.Context, mid cid.Cid) (*types.MsgLookup, error)                                                                                                                                    `perm:"read"`
 		NetAddrsListen                         func(context.Context) (peer.AddrInfo, error)                                                                                                                                                        `perm:"read"`
 		NetConnect                             func(ctx context.Context, addr string) error                                                                                                                                                        `perm:"admin"`
+		NetPeers                               func(ctx context.Context) ([]peer.AddrInfo, error)                                                                                                                                                  `perm:"red"`
 		PaychVoucherList                       func(ctx context.Context, pch address.Address) ([]*paych.SignedVoucher, error)                                                                                                                      `perm:"read"`
 		PiecesGetCIDInfo                       func(ctx context.Context, payloadCid cid.Cid) (*piecestore.CIDInfo, error)                                                                                                                          `perm:"read"`
 		PiecesGetPieceInfo                     func(ctx context.Context, pieceCid cid.Cid) (*piecestore.PieceInfo, error)                                                                                                                          `perm:"read"`
@@ -290,6 +291,9 @@ func (s *IMarketStruct) NetAddrsListen(p0 context.Context) (peer.AddrInfo, error
 }
 func (s *IMarketStruct) NetConnect(p0 context.Context, p1 string) error {
 	return s.Internal.NetConnect(p0, p1)
+}
+func (s *IMarketStruct) NetPeers(p0 context.Context) ([]peer.AddrInfo, error) {
+	return s.Internal.NetPeers(p0)
 }
 func (s *IMarketStruct) PaychVoucherList(p0 context.Context, p1 address.Address) ([]*paych.SignedVoucher, error) {
 	return s.Internal.PaychVoucherList(p0, p1)

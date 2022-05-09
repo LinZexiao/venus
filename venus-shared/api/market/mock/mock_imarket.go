@@ -958,6 +958,21 @@ func (mr *MockIMarketMockRecorder) NetConnect(arg0, arg1 interface{}) *gomock.Ca
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NetConnect", reflect.TypeOf((*MockIMarket)(nil).NetConnect), arg0, arg1)
 }
 
+// NetPeers mocks base method.
+func (m *MockIMarket) NetPeers(arg0 context.Context) ([]peer.AddrInfo, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "NetPeers", arg0)
+	ret0, _ := ret[0].([]peer.AddrInfo)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// NetPeers indicates an expected call of NetPeers.
+func (mr *MockIMarketMockRecorder) NetPeers(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NetPeers", reflect.TypeOf((*MockIMarket)(nil).NetPeers), arg0)
+}
+
 // PaychVoucherList mocks base method.
 func (m *MockIMarket) PaychVoucherList(arg0 context.Context, arg1 address.Address) ([]*paych.SignedVoucher, error) {
 	m.ctrl.T.Helper()
