@@ -1,5 +1,8 @@
 # Groups
 
+* [IdxProvider](#IdxProvider)
+  * [Announce](#Announce)
+  * [LatestAdv](#LatestAdv)
 * [Market](#Market)
   * [ActorExist](#ActorExist)
   * [ActorList](#ActorList)
@@ -61,6 +64,7 @@
   * [MessagerWaitMessage](#MessagerWaitMessage)
   * [NetAddrsListen](#NetAddrsListen)
   * [NetConnect](#NetConnect)
+  * [NetPeers](#NetPeers)
   * [PaychVoucherList](#PaychVoucherList)
   * [PiecesGetCIDInfo](#PiecesGetCIDInfo)
   * [PiecesGetPieceInfo](#PiecesGetPieceInfo)
@@ -72,6 +76,36 @@
   * [UpdateDealOnPacking](#UpdateDealOnPacking)
   * [UpdateDealStatus](#UpdateDealStatus)
   * [UpdateStorageDealStatus](#UpdateStorageDealStatus)
+
+## IdxProvider
+
+### Announce
+
+
+Perms: admin
+
+Inputs: `[]`
+
+Response:
+```json
+{
+  "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+}
+```
+
+### LatestAdv
+
+
+Perms: read
+
+Inputs: `[]`
+
+Response:
+```json
+{
+  "/": "bafy2bzacea3wsdh6y3a36tb3skempjoxqpuyompjbmfeyf34fi3uy6uue42v4"
+}
+```
 
 ## Market
 
@@ -1532,6 +1566,25 @@ Inputs:
 ```
 
 Response: `{}`
+
+### NetPeers
+
+
+Perms: read
+
+Inputs: `[]`
+
+Response:
+```json
+[
+  {
+    "ID": "12D3KooWGzxzKZYveHXtpG6AsrUJBcWxHBFS2HsEoGTxrMLvKXtf",
+    "Addrs": [
+      "/ip4/52.36.61.156/tcp/1347/p2p/12D3KooWFETiESTf1v4PGUvtnxMAcEFMzLZbJGg4tjWfGEimYior"
+    ]
+  }
+]
+```
 
 ### PaychVoucherList
 Paych

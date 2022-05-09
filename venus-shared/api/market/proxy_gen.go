@@ -11,7 +11,6 @@ import (
 	"github.com/filecoin-project/go-fil-markets/retrievalmarket"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/storetheindex/api/v0/ingest/schema"
 	cid "github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 
@@ -23,16 +22,16 @@ import (
 
 type IIdxProviderStruct struct {
 	Internal struct {
-		IndexAnnounce            func(ctx context.Context) (*schema.Advertisement, error) `perm:"admin"`
-		IndexLatestAdvertisement func(ctx context.Context) (*schema.Advertisement, error) `perm:"admin"`
+		Announce  func(context.Context) (cid.Cid, error) `perm:"admin"`
+		LatestAdv func(context.Context) (cid.Cid, error) `perm:"read"`
 	}
 }
 
-func (s *IIdxProviderStruct) IndexAnnounce(p0 context.Context) (*schema.Advertisement, error) {
-	return s.Internal.IndexAnnounce(p0)
+func (s *IIdxProviderStruct) Announce(p0 context.Context) (cid.Cid, error) {
+	return s.Internal.Announce(p0)
 }
-func (s *IIdxProviderStruct) IndexLatestAdvertisement(p0 context.Context) (*schema.Advertisement, error) {
-	return s.Internal.IndexLatestAdvertisement(p0)
+func (s *IIdxProviderStruct) LatestAdv(p0 context.Context) (cid.Cid, error) {
+	return s.Internal.LatestAdv(p0)
 }
 
 type IMarketStruct struct {

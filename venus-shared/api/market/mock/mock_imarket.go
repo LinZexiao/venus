@@ -94,6 +94,21 @@ func (mr *MockIMarketMockRecorder) ActorSectorSize(arg0, arg1 interface{}) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ActorSectorSize", reflect.TypeOf((*MockIMarket)(nil).ActorSectorSize), arg0, arg1)
 }
 
+// Announce mocks base method.
+func (m *MockIMarket) Announce(arg0 context.Context) (cid.Cid, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Announce", arg0)
+	ret0, _ := ret[0].(cid.Cid)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Announce indicates an expected call of Announce.
+func (mr *MockIMarketMockRecorder) Announce(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Announce", reflect.TypeOf((*MockIMarket)(nil).Announce), arg0)
+}
+
 // AssignUnPackedDeals mocks base method.
 func (m *MockIMarket) AssignUnPackedDeals(arg0 context.Context, arg1 abi.SectorID, arg2 abi.SectorSize, arg3 *market.GetDealSpec) ([]*market.DealInfoIncludePath, error) {
 	m.ctrl.T.Helper()
@@ -488,34 +503,19 @@ func (mr *MockIMarketMockRecorder) ImportV1Data(arg0, arg1 interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ImportV1Data", reflect.TypeOf((*MockIMarket)(nil).ImportV1Data), arg0, arg1)
 }
 
-// IndexAnnounce mocks base method.
-func (m *MockIMarket) IndexAnnounce(arg0 context.Context) (**schema._Advertisement, error) {
+// LatestAdv mocks base method.
+func (m *MockIMarket) LatestAdv(arg0 context.Context) (cid.Cid, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "IndexAnnounce", arg0)
-	ret0, _ := ret[0].(**schema._Advertisement)
+	ret := m.ctrl.Call(m, "LatestAdv", arg0)
+	ret0, _ := ret[0].(cid.Cid)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// IndexAnnounce indicates an expected call of IndexAnnounce.
-func (mr *MockIMarketMockRecorder) IndexAnnounce(arg0 interface{}) *gomock.Call {
+// LatestAdv indicates an expected call of LatestAdv.
+func (mr *MockIMarketMockRecorder) LatestAdv(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IndexAnnounce", reflect.TypeOf((*MockIMarket)(nil).IndexAnnounce), arg0)
-}
-
-// IndexLatestAdvertisement mocks base method.
-func (m *MockIMarket) IndexLatestAdvertisement(arg0 context.Context) (**schema._Advertisement, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "IndexLatestAdvertisement", arg0)
-	ret0, _ := ret[0].(**schema._Advertisement)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// IndexLatestAdvertisement indicates an expected call of IndexLatestAdvertisement.
-func (mr *MockIMarketMockRecorder) IndexLatestAdvertisement(arg0 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IndexLatestAdvertisement", reflect.TypeOf((*MockIMarket)(nil).IndexLatestAdvertisement), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LatestAdv", reflect.TypeOf((*MockIMarket)(nil).LatestAdv), arg0)
 }
 
 // ListenMarketEvent mocks base method.
