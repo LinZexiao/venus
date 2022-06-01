@@ -5,7 +5,7 @@ import (
 	"github.com/filecoin-project/go-fil-markets/filestore"
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-state-types/abi"
-	"github.com/filecoin-project/specs-actors/v8/actors/builtin/market"
+	"github.com/filecoin-project/go-state-types/builtin/v8/market"
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p-core/peer"
 	cbg "github.com/whyrusleeping/cbor-gen"
@@ -41,30 +41,3 @@ type MinerDeal struct {
 	InboundCAR string
 }
 
-func (deal *MinerDeal) FilMarketMinerDeal() *storagemarket.MinerDeal {
-	return &storagemarket.MinerDeal{
-		ClientDealProposal:    deal.ClientDealProposal,
-		ProposalCid:           deal.ProposalCid,
-		AddFundsCid:           deal.AddFundsCid,
-		PublishCid:            deal.PublishCid,
-		Miner:                 deal.Miner,
-		Client:                deal.Client,
-		State:                 deal.State,
-		PiecePath:             deal.PiecePath,
-		MetadataPath:          deal.MetadataPath,
-		SlashEpoch:            deal.SlashEpoch,
-		FastRetrieval:         deal.FastRetrieval,
-		Message:               deal.Message,
-		FundsReserved:         deal.FundsReserved,
-		Ref:                   deal.Ref,
-		AvailableForRetrieval: deal.AvailableForRetrieval,
-
-		DealID:       deal.DealID,
-		CreationTime: deal.CreationTime,
-
-		TransferChannelId: deal.TransferChannelID,
-		SectorNumber:      deal.SectorNumber,
-
-		InboundCAR: deal.InboundCAR,
-	}
-}
