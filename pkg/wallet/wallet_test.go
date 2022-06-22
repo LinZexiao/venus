@@ -1,3 +1,4 @@
+//stm: #unit
 package wallet
 
 import (
@@ -86,6 +87,7 @@ func TestWalletBLSKeys(t *testing.T) {
 	require.NoError(t, err)
 
 	data := []byte("data to be signed")
+	//stm: @WALLET_WALLET_SIGN_BYTES_001
 	sig, err := w.SignBytes(ctx, data, addr)
 	require.NoError(t, err)
 
