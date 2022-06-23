@@ -150,6 +150,8 @@ type IMarket interface {
 
 	AddFsPieceStorage(ctx context.Context, readonly bool, path string) error //perm:admin
 
+	AddS3PieceStorage(ctx context.Context, readonly bool, endpoit, key, secret, token string) error //perm:admin
+
 	ListPieceStorage(ctx context.Context) (string, error) //perm:read
 
 	RemovePieceStorage(ctx context.Context, idx int) error //perm:admin

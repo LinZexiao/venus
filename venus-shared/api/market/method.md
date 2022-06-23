@@ -5,6 +5,7 @@
   * [ActorList](#ActorList)
   * [ActorSectorSize](#ActorSectorSize)
   * [AddFsPieceStorage](#AddFsPieceStorage)
+  * [AddS3PieceStorage](#AddS3PieceStorage)
   * [AssignUnPackedDeals](#AssignUnPackedDeals)
   * [DagstoreGC](#DagstoreGC)
   * [DagstoreInitializeAll](#DagstoreInitializeAll)
@@ -131,6 +132,24 @@ Inputs:
 ```json
 [
   true,
+  "string value"
+]
+```
+
+Response: `{}`
+
+### AddS3PieceStorage
+
+
+Perms: admin
+
+Inputs:
+```json
+[
+  true,
+  "string value",
+  "string value",
+  "string value",
   "string value"
 ]
 ```

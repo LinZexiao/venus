@@ -108,6 +108,20 @@ func (mr *MockIMarketMockRecorder) AddFsPieceStorage(arg0, arg1, arg2 interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddFsPieceStorage", reflect.TypeOf((*MockIMarket)(nil).AddFsPieceStorage), arg0, arg1, arg2)
 }
 
+// AddS3PieceStorage mocks base method.
+func (m *MockIMarket) AddS3PieceStorage(arg0 context.Context, arg1 bool, arg2, arg3, arg4, arg5 string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddS3PieceStorage", arg0, arg1, arg2, arg3, arg4, arg5)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddS3PieceStorage indicates an expected call of AddS3PieceStorage.
+func (mr *MockIMarketMockRecorder) AddS3PieceStorage(arg0, arg1, arg2, arg3, arg4, arg5 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddS3PieceStorage", reflect.TypeOf((*MockIMarket)(nil).AddS3PieceStorage), arg0, arg1, arg2, arg3, arg4, arg5)
+}
+
 // AssignUnPackedDeals mocks base method.
 func (m *MockIMarket) AssignUnPackedDeals(arg0 context.Context, arg1 abi.SectorID, arg2 abi.SectorSize, arg3 *market.GetDealSpec) ([]*market.DealInfoIncludePath, error) {
 	m.ctrl.T.Helper()

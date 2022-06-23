@@ -26,6 +26,7 @@ type IMarketStruct struct {
 		ActorList                              func(context.Context) ([]market.User, error)                                                                                                                                                        `perm:"read"`
 		ActorSectorSize                        func(context.Context, address.Address) (abi.SectorSize, error)                                                                                                                                      `perm:"read"`
 		AddFsPieceStorage                      func(ctx context.Context, readonly bool, path string) error                                                                                                                                         `perm:"admin"`
+		AddS3PieceStorage                      func(ctx context.Context, readonly bool, endpoit, key, secret, token string) error                                                                                                                  `perm:"admin"`
 		AssignUnPackedDeals                    func(ctx context.Context, sid abi.SectorID, ssize abi.SectorSize, spec *market.GetDealSpec) ([]*market.DealInfoIncludePath, error)                                                                  `perm:"write"`
 		DagstoreGC                             func(ctx context.Context) ([]market.DagstoreShardResult, error)                                                                                                                                     `perm:"admin"`
 		DagstoreInitializeAll                  func(ctx context.Context, params market.DagstoreInitializeAllParams) (<-chan market.DagstoreInitializeAllEvent, error)                                                                              `perm:"write"`
@@ -109,6 +110,9 @@ func (s *IMarketStruct) ActorSectorSize(p0 context.Context, p1 address.Address) 
 }
 func (s *IMarketStruct) AddFsPieceStorage(p0 context.Context, p1 bool, p2 string) error {
 	return s.Internal.AddFsPieceStorage(p0, p1, p2)
+}
+func (s *IMarketStruct) AddS3PieceStorage(p0 context.Context, p1 bool, p2, p3, p4, p5 string) error {
+	return s.Internal.AddS3PieceStorage(p0, p1, p2, p3, p4, p5)
 }
 func (s *IMarketStruct) AssignUnPackedDeals(p0 context.Context, p1 abi.SectorID, p2 abi.SectorSize, p3 *market.GetDealSpec) ([]*market.DealInfoIncludePath, error) {
 	return s.Internal.AssignUnPackedDeals(p0, p1, p2, p3)
