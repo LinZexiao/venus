@@ -25,6 +25,7 @@ type IMarketStruct struct {
 		ActorExist                             func(ctx context.Context, addr address.Address) (bool, error)                                                                                                                                       `perm:"read"`
 		ActorList                              func(context.Context) ([]market.User, error)                                                                                                                                                        `perm:"read"`
 		ActorSectorSize                        func(context.Context, address.Address) (abi.SectorSize, error)                                                                                                                                      `perm:"read"`
+		AddFsPieceStorage                      func(ctx context.Context, readonly bool, path string) error                                                                                                                                         `perm:"admin"`
 		AssignUnPackedDeals                    func(ctx context.Context, sid abi.SectorID, ssize abi.SectorSize, spec *market.GetDealSpec) ([]*market.DealInfoIncludePath, error)                                                                  `perm:"write"`
 		DagstoreGC                             func(ctx context.Context) ([]market.DagstoreShardResult, error)                                                                                                                                     `perm:"admin"`
 		DagstoreInitializeAll                  func(ctx context.Context, params market.DagstoreInitializeAllParams) (<-chan market.DagstoreInitializeAllEvent, error)                                                                              `perm:"write"`
@@ -52,6 +53,7 @@ type IMarketStruct struct {
 		GetWriteUrl                            func(ctx context.Context, resource string) (string, error)                                                                                                                                          `perm:"read"`
 		ID                                     func(context.Context) (peer.ID, error)                                                                                                                                                              `perm:"read"`
 		ImportV1Data                           func(ctx context.Context, src string) error                                                                                                                                                         `perm:"write"`
+		ListPieceStorage                       func(ctx context.Context) (string, error)                                                                                                                                                           `perm:"read"`
 		ListenMarketEvent                      func(ctx context.Context, policy *gateway.MarketRegisterPolicy) (<-chan *gateway.RequestEvent, error)                                                                                               `perm:"read"`
 		MarkDealsAsPacking                     func(ctx context.Context, miner address.Address, deals []abi.DealID) error                                                                                                                          `perm:"write"`
 		MarketAddBalance                       func(ctx context.Context, wallet, addr address.Address, amt types.BigInt) (cid.Cid, error)                                                                                                          `perm:"sign"`
@@ -86,6 +88,7 @@ type IMarketStruct struct {
 		PiecesGetPieceInfo                     func(ctx context.Context, pieceCid cid.Cid) (*piecestore.PieceInfo, error)                                                                                                                          `perm:"read"`
 		PiecesListCidInfos                     func(ctx context.Context) ([]cid.Cid, error)                                                                                                                                                        `perm:"read"`
 		PiecesListPieces                       func(ctx context.Context) ([]cid.Cid, error)                                                                                                                                                        `perm:"read"`
+		RemovePieceStorage                     func(ctx context.Context, idx int) error                                                                                                                                                            `perm:"admin"`
 		ResponseMarketEvent                    func(ctx context.Context, resp *gateway.ResponseEvent) error                                                                                                                                        `perm:"read"`
 		SectorGetSealDelay                     func(context.Context) (time.Duration, error)                                                                                                                                                        `perm:"read"`
 		SectorSetExpectedSealDuration          func(context.Context, time.Duration) error                                                                                                                                                          `perm:"write"`
@@ -103,6 +106,9 @@ func (s *IMarketStruct) ActorList(p0 context.Context) ([]market.User, error) {
 }
 func (s *IMarketStruct) ActorSectorSize(p0 context.Context, p1 address.Address) (abi.SectorSize, error) {
 	return s.Internal.ActorSectorSize(p0, p1)
+}
+func (s *IMarketStruct) AddFsPieceStorage(p0 context.Context, p1 bool, p2 string) error {
+	return s.Internal.AddFsPieceStorage(p0, p1, p2)
 }
 func (s *IMarketStruct) AssignUnPackedDeals(p0 context.Context, p1 abi.SectorID, p2 abi.SectorSize, p3 *market.GetDealSpec) ([]*market.DealInfoIncludePath, error) {
 	return s.Internal.AssignUnPackedDeals(p0, p1, p2, p3)
@@ -182,6 +188,9 @@ func (s *IMarketStruct) GetWriteUrl(p0 context.Context, p1 string) (string, erro
 func (s *IMarketStruct) ID(p0 context.Context) (peer.ID, error) { return s.Internal.ID(p0) }
 func (s *IMarketStruct) ImportV1Data(p0 context.Context, p1 string) error {
 	return s.Internal.ImportV1Data(p0, p1)
+}
+func (s *IMarketStruct) ListPieceStorage(p0 context.Context) (string, error) {
+	return s.Internal.ListPieceStorage(p0)
 }
 func (s *IMarketStruct) ListenMarketEvent(p0 context.Context, p1 *gateway.MarketRegisterPolicy) (<-chan *gateway.RequestEvent, error) {
 	return s.Internal.ListenMarketEvent(p0, p1)
@@ -284,6 +293,9 @@ func (s *IMarketStruct) PiecesListCidInfos(p0 context.Context) ([]cid.Cid, error
 }
 func (s *IMarketStruct) PiecesListPieces(p0 context.Context) ([]cid.Cid, error) {
 	return s.Internal.PiecesListPieces(p0)
+}
+func (s *IMarketStruct) RemovePieceStorage(p0 context.Context, p1 int) error {
+	return s.Internal.RemovePieceStorage(p0, p1)
 }
 func (s *IMarketStruct) ResponseMarketEvent(p0 context.Context, p1 *gateway.ResponseEvent) error {
 	return s.Internal.ResponseMarketEvent(p0, p1)

@@ -147,4 +147,11 @@ type IMarket interface {
 	GetWriteUrl(ctx context.Context, resource string) (string, error) //perm:read
 
 	ImportV1Data(ctx context.Context, src string) error //perm:write
+
+	AddFsPieceStorage(ctx context.Context, readonly bool, path string) error //perm:admin
+
+	ListPieceStorage(ctx context.Context) (string, error) //perm:read
+
+	RemovePieceStorage(ctx context.Context, idx int) error //perm:admin
+
 }

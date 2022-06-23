@@ -94,6 +94,20 @@ func (mr *MockIMarketMockRecorder) ActorSectorSize(arg0, arg1 interface{}) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ActorSectorSize", reflect.TypeOf((*MockIMarket)(nil).ActorSectorSize), arg0, arg1)
 }
 
+// AddFsPieceStorage mocks base method.
+func (m *MockIMarket) AddFsPieceStorage(arg0 context.Context, arg1 bool, arg2 string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddFsPieceStorage", arg0, arg1, arg2)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddFsPieceStorage indicates an expected call of AddFsPieceStorage.
+func (mr *MockIMarketMockRecorder) AddFsPieceStorage(arg0, arg1, arg2 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddFsPieceStorage", reflect.TypeOf((*MockIMarket)(nil).AddFsPieceStorage), arg0, arg1, arg2)
+}
+
 // AssignUnPackedDeals mocks base method.
 func (m *MockIMarket) AssignUnPackedDeals(arg0 context.Context, arg1 abi.SectorID, arg2 abi.SectorSize, arg3 *market.GetDealSpec) ([]*market.DealInfoIncludePath, error) {
 	m.ctrl.T.Helper()
@@ -486,6 +500,21 @@ func (m *MockIMarket) ImportV1Data(arg0 context.Context, arg1 string) error {
 func (mr *MockIMarketMockRecorder) ImportV1Data(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ImportV1Data", reflect.TypeOf((*MockIMarket)(nil).ImportV1Data), arg0, arg1)
+}
+
+// ListPieceStorage mocks base method.
+func (m *MockIMarket) ListPieceStorage(arg0 context.Context) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListPieceStorage", arg0)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListPieceStorage indicates an expected call of ListPieceStorage.
+func (mr *MockIMarketMockRecorder) ListPieceStorage(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListPieceStorage", reflect.TypeOf((*MockIMarket)(nil).ListPieceStorage), arg0)
 }
 
 // ListenMarketEvent mocks base method.
@@ -987,6 +1016,20 @@ func (m *MockIMarket) PiecesListPieces(arg0 context.Context) ([]cid.Cid, error) 
 func (mr *MockIMarketMockRecorder) PiecesListPieces(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PiecesListPieces", reflect.TypeOf((*MockIMarket)(nil).PiecesListPieces), arg0)
+}
+
+// RemovePieceStorage mocks base method.
+func (m *MockIMarket) RemovePieceStorage(arg0 context.Context, arg1 int) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemovePieceStorage", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// RemovePieceStorage indicates an expected call of RemovePieceStorage.
+func (mr *MockIMarketMockRecorder) RemovePieceStorage(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemovePieceStorage", reflect.TypeOf((*MockIMarket)(nil).RemovePieceStorage), arg0, arg1)
 }
 
 // ResponseMarketEvent mocks base method.

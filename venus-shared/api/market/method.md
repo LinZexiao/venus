@@ -4,6 +4,7 @@
   * [ActorExist](#ActorExist)
   * [ActorList](#ActorList)
   * [ActorSectorSize](#ActorSectorSize)
+  * [AddFsPieceStorage](#AddFsPieceStorage)
   * [AssignUnPackedDeals](#AssignUnPackedDeals)
   * [DagstoreGC](#DagstoreGC)
   * [DagstoreInitializeAll](#DagstoreInitializeAll)
@@ -31,6 +32,7 @@
   * [GetWriteUrl](#GetWriteUrl)
   * [ID](#ID)
   * [ImportV1Data](#ImportV1Data)
+  * [ListPieceStorage](#ListPieceStorage)
   * [ListenMarketEvent](#ListenMarketEvent)
   * [MarkDealsAsPacking](#MarkDealsAsPacking)
   * [MarketAddBalance](#MarketAddBalance)
@@ -65,6 +67,7 @@
   * [PiecesGetPieceInfo](#PiecesGetPieceInfo)
   * [PiecesListCidInfos](#PiecesListCidInfos)
   * [PiecesListPieces](#PiecesListPieces)
+  * [RemovePieceStorage](#RemovePieceStorage)
   * [ResponseMarketEvent](#ResponseMarketEvent)
   * [SectorGetSealDelay](#SectorGetSealDelay)
   * [SectorSetExpectedSealDuration](#SectorSetExpectedSealDuration)
@@ -118,6 +121,21 @@ Inputs:
 ```
 
 Response: `34359738368`
+
+### AddFsPieceStorage
+
+
+Perms: admin
+
+Inputs:
+```json
+[
+  true,
+  "string value"
+]
+```
+
+Response: `{}`
 
 ### AssignUnPackedDeals
 
@@ -638,6 +656,15 @@ Inputs:
 ```
 
 Response: `{}`
+
+### ListPieceStorage
+
+
+Perms: read
+
+Inputs: `[]`
+
+Response: `"string value"`
 
 ### ListenMarketEvent
 
@@ -1662,6 +1689,20 @@ Response:
   }
 ]
 ```
+
+### RemovePieceStorage
+
+
+Perms: admin
+
+Inputs:
+```json
+[
+  123
+]
+```
+
+Response: `{}`
 
 ### ResponseMarketEvent
 market event
