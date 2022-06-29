@@ -3,7 +3,7 @@ name: build for test/release
 on:
   create:
     tags:
-      - '**'
+      - "**"
   pull_request:
     branches:
       - master
@@ -18,8 +18,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          submodules: 'true'
-          fetch-depth: '0'
+          submodules: "true"
+          fetch-depth: "0"
 
       - name: vars
         id: vars
@@ -173,9 +173,11 @@ jobs:
                   --data-urlencode "version=${{steps.vars.outputs.short}}"
           set -e
 
-      - name: Publish the Docker image 
+      - name: Publish the Docker image
         if: ${{ github.ref_type == 'tag' && github.event_name == 'create' }}
         run: |
+          echo $github.ref_type
+          echo $github.event_name
           make docker-buildenv
           make docker-runtime
           docker build . --file dockerfile --tag filvenus/venus:latest
