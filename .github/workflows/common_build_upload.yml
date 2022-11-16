@@ -160,7 +160,6 @@ jobs:
           artifacts: ${{steps.vars.outputs.artifact_name}}
           tag: ${{ steps.vars.outputs.github_tag }}
           commit: ${{ steps.vars.outputs.commit }}
-          token: ${{ secrets.token }}
 
       - name: upload ftp
         id: uploadftp
